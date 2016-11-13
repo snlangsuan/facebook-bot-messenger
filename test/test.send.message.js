@@ -9,9 +9,10 @@ var nock = require('nock');
 var BotMessenger = require('../');
 
 var QuickRepliesMessageBuilder = BotMessenger.QuickRepliesMessageBuilder;
-var TemplateMessageBuilder = BotMessenger.TemplateMessageBuilder;
+var AttachmentMessageBuilder = BotMessenger.AttachmentMessageBuilder;
 
 var GenericTemplateBuilder = BotMessenger.GenericTemplateBuilder;
+var GenericElementTemplateBuilder = BotMessenger.GenericElementTemplateBuilder;
 var ButtonTemplateBuilder = BotMessenger.ButtonTemplateBuilder;
 var ReceiptTemplateBuilder = BotMessenger.ReceiptTemplateBuilder;
 
@@ -21,21 +22,22 @@ var ShareButtonBuilder = BotMessenger.ShareButtonBuilder;
 var CallButtonBuilder = BotMessenger.CallButtonBuilder;
 var BuyButtonBuilder = BotMessenger.BuyButtonBuilder;
 
+var options = {
+  pageID: '12345678',
+  appID: '1234567890',
+  appSecret: 'testsecret',
+  validationToken: 'testvalidationtoken',
+  pageToken: 'pagetoken'
+};
+
 function mockApi() {
+  var path = '/v2.8/me/messages?access_token=' + encodeURIComponent(options.pageToken);
   nock('https://graph.facebook.com')
-    .post('/v2.8/me/messages')
+    .post(path)
     .reply(200, {});
 }
 
 describe('BotMessenger#sendMessage', function() {
-  var options = {
-    pageID: '12345678',
-    appID: '1234567890',
-    appSecret: 'testsecret',
-    validationToken: 'testvalidationtoken',
-    pageToken: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9/eyJzdWIiOiIyMDAiLCJpc3MiOiJodHRwOlwvXC9lZGNtcy5tb25vaW5mb3N5c3RlbXMuY29tXC9hcGlcL3YxXC9hdXRoXC9sb2dpbiIsImlhdCI6MTQ3NTAzMDc5MiwiZXhwIjoxNDc1MDM0MzkyLCJuYmYiOjE0NzUwMzA3OTIsImp0aSI6IjNkMTlkZjRhOTQ4YzgxNjU2ZTUzMzZlZjVmY2E2YWIwIn0/Fdmehk8h50Aeg5k8yHG9vsNJXvVQGQI5rdpz0rndge8'
-  };
-
   var bot = BotMessenger.create(options);
 
   beforeEach(function() {
@@ -82,40 +84,54 @@ describe('BotMessenger#sendMessage', function() {
   });
 
   it('should be able to send generic template message', function(done) {
-    var template = new GenericTemplateBuilder('Welcome to Peter\'s Hats');
-    template.setSubTitle('We\'ve got the right hat for everyone.')
-           .setLink('https://petersfancybrownhats.com')
-           .setThumbnailImageUrl('https://petersfancybrownhats.com/company_image.png')
-           .addMessageButton(new URLButtonBuilder('View Website', 'https://petersfancybrownhats.com'))
-           .addMessageButton(new PostbackButtonBuilder('Start Chatting', 'DEVELOPER_DEFINED_PAYLOAD'));
-    var message = new TemplateMessageBuilder(template);
+    var buybutton = new BuyButtonBuilder('buy', 'DEVELOPER_DEFINED_PAYLOAD');
+    buybutton.setCurrency('THB')
+             .setPaymentType(BuyButtonBuilder.PAYMENT_TYPE.FIXED)
+             .isTestPayment(true)
+             .setMerchantName('Peter\'s Apparel')
+             .requestedShippingAddress()
+             .requestedContactName()
+             .requestedContactPhone()
+             .requestedContactEmail()
+             .addPriceList('Subtotal', '29.99')
+             .addPriceList('Taxes', '2.47');
+    var element1 = new GenericElementTemplateBuilder('Welcome to Peter\'s Hats1', 'https://petersfancybrownhats.com/1', 'https://petersfancybrownhats.com/company_image1.png', 'We\'ve got the right hat for everyone.');
+    element1.addButton(new ShareButtonBuilder());
+    var element2 = new GenericElementTemplateBuilder('Welcome to Peter\'s Hats2', 'https://petersfancybrownhats.com/2', 'https://petersfancybrownhats.com/company_image2.png', 'We\'ve got the right hat for everyone.');
+    element2.addButton(buybutton);
+
+    var template = new GenericTemplateBuilder();
+    template.addElement(element1)
+            .addElement(element2);
+
+    var message = new AttachmentMessageBuilder();
+    message.addTemplateAttachment(template);
     bot.sendMessage('DUMMY_USER_ID', message).then(function() {
       done();
     });
   });
 
   it('should be able to send button template message', function(done) {
-    var buttons = [
-      new URLButtonBuilder('Show Website', 'https://petersapparel.parseapp.com'),
-      new PostbackButtonBuilder('Start Chatting', 'USER_DEFINED_PAYLOAD')
-    ];
+    var template = new ButtonTemplateBuilder();
+    template.setText('What do you want to do next?')
+            .addURLButton('Show Website', 'https://petersapparel.parseapp.com')
+            .addPostbackButton('Start Chatting', 'USER_DEFINED_PAYLOAD')
+            .addButton(new CallButtonBuilder('Call Representative', '+123123123'));
 
-    var template = new ButtonTemplateBuilder('What do you want to do next?', buttons);
-    var message = new TemplateMessageBuilder(template);
+    var message = new AttachmentMessageBuilder();
+    message.addTemplateAttachment(template);
     bot.sendMessage('DUMMY_USER_ID', message).then(function() {
       done();
     });
   });
 
   it('should be able to send receipt template message', function(done) {
-    var template = new ReceiptTemplateBuilder('Stephane Crozatier', '12345678902', 'USD', 'Visa 2345', 'http://petersapparel.parseapp.com/order?order_id=123456', '1428444852');
-    template.setAddress('1 Hacker Way', 'Menlo Park', '94025', 'CA', 'US')
-            .addPurchaseList('Classic White T-Shirt', 50, '100% Soft and Luxurious Cotton', 2, 'http://petersapparel.parseapp.com/img/whiteshirt.png')
-            .addPurchaseList('Classic Gray T-Shirt', 25, '100% Soft and Luxurious Cotton', 1, 'http://petersapparel.parseapp.com/img/grayshirt.png')
-            .setSummary(56.14, 75.00, 4.95, 6.19)
-            .addAdjustments('New Customer Discount', 20)
-            .addAdjustments('$10 Off Coupon', 10);
-    var message = new TemplateMessageBuilder(template);
+    var template = new ReceiptTemplateBuilder('Stephane Crozatier', '12345678902', 'THB', 'Visa 2345');
+    template.setSummary('1000')
+            .setTimestamp(new Date().getTime());
+
+    var message = new AttachmentMessageBuilder();
+    message.addTemplateAttachment(template);
     bot.sendMessage('DUMMY_USER_ID', message).then(function() {
       done();
     });

@@ -4,7 +4,7 @@ var BotMessenger = require('./lib/botmessenger');
 var BaseEvent = require('./lib/botmessenger/event/base.event');
 var Message = require('./lib/botmessenger/message');
 var Template = require('./lib/botmessenger/message/template');
-var MessageButtons = require('./lib/botmessenger/button');
+var MessageButton = require('./lib/botmessenger/button');
 
 module.exports = {
   create: function(options, server) {
@@ -20,17 +20,20 @@ module.exports = {
 
   // message builder
   TextMessageBuilder: require('./lib/botmessenger/message/text.message'),
-  ImageMessageBuilder: require('./lib/botmessenger/message/image.message'),
-  AudioMessageBuilder: require('./lib/botmessenger/message/audio.message'),
-  VideoMessageBuilder: require('./lib/botmessenger/message/video.message'),
-  FileMessageBuilder: require('./lib/botmessenger/message/file.message'),
+  AttachmentMessageBuilder: require('./lib/botmessenger/message/attachment.message'),
+  ImageAttachmentBuilder: require('./lib/botmessenger/message/media/image.attachment'),
+  AudioAttachmentBuilder: require('./lib/botmessenger/message/media/audio.attachment'),
+  VideoAttachmentBuilder: require('./lib/botmessenger/message/media/video.attachment'),
+  FileAttachmentBuilder: require('./lib/botmessenger/message/media/file.attachment'),
   QuickRepliesMessageBuilder: require('./lib/botmessenger/message/quick.replies.message'),
-  TemplateMessageBuilder: require('./lib/botmessenger/message/template.message'),
 
   // template builder
   GenericTemplateBuilder: require('./lib/botmessenger/message/template/generic.template'),
+  GenericElementTemplateBuilder: require('./lib/botmessenger/message/template/generic.element.template'),
   ButtonTemplateBuilder: require('./lib/botmessenger/message/template/button.template'),
   ReceiptTemplateBuilder: require('./lib/botmessenger/message/template/receipt.template'),
+  ListTemplateBuilder: require('./lib/botmessenger/message/template/list.template'),
+  ListElementTemplateBuilder: require('./lib/botmessenger/message/template/list.element.template'),
 
   // message buttons
   URLButtonBuilder: require('./lib/botmessenger/button/url.button'),
@@ -38,13 +41,15 @@ module.exports = {
   ShareButtonBuilder: require('./lib/botmessenger/button/share.button'),
   CallButtonBuilder: require('./lib/botmessenger/button/call.button'),
   BuyButtonBuilder: require('./lib/botmessenger/button/buy.button'),
+  AccountLinkButtonBuilder: require('./lib/botmessenger/button/account.link.button'),
+  AccountUnlinkButtonBuilder: require('./lib/botmessenger/button/account.unlink.button'),
 
   // constant
   Events: BaseEvent.TYPE,
-  Attachment: Message.ATTACHMENT_TYPE,
+  Attachments: Message.ATTACHMENT_TYPE,
   Actions: Message.ACTION,
   Template: Template.TYPE,
-  MessageButtons: MessageButtons.TYPE,
-  Payment: MessageButtons.PAYMENT_TYPE,
-  WebviewHeight: MessageButtons.HEIGHT_RATIO
+  MessageButtons: MessageButton.TYPE,
+  Payment: MessageButton.PAYMENT_TYPE,
+  WebviewHeight: MessageButton.HEIGHT_RATIO
 };

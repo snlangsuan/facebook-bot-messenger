@@ -18,7 +18,7 @@ describe('FacebookServerReqestWebhook', function () {
   bot.on(BotMessenger.Events.MESSAGE, function(senderId, message) {
     senderId.should.equal('USER_ID');
     message.getTimestamp().should.equal(1458692752478);
-    message.isQuickReplay().should.be.true;
+    message.isQuickReply().should.be.true;
     message.getMessageId().should.equal('mid.1457764197618:41d102a3e1ae206a38');
     message.getMessageSeq().should.equal(73);
     message.getText().should.equal('hello, world!');
