@@ -1,6 +1,6 @@
 {
     "name": "facebook-bot-messenger",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "SDK of the Facebook messenger platform for Node.js",
     "main": "index.js",
     "scripts": {
