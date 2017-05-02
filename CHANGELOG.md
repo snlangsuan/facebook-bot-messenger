@@ -4,3 +4,6 @@
 ## v1.0.3
  - Can change GraphAPI version
  - Fixed bug
+
+## v1.0.4
+ - Fixed bug
