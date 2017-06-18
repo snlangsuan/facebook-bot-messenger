@@ -215,7 +215,7 @@ element1.setDefaultAction('https://peterssendreceiveapp.ngrok.io/view?item=102',
 var element2 = new MessengerPlatform.ListElementTemplateBuilder('Classic Gray T-Shirt', 'https://peterssendreceiveapp.ngrok.io/img/gray-t-shirt.png', '100% Cotton, 200% Comfortable');
 element2.setDefaultAction('https://peterssendreceiveapp.ngrok.io/view?item=103', 'https://peterssendreceiveapp.ngrok.io/', true, URLButton.HEIGHT_RATIO.TALL)
         .addURLButton('Buy', 'https://peterssendreceiveapp.ngrok.io/shop?item=103');
-var template = new ListTemplate();
+var template = new MessengerPlatform.ListTemplateBuilder();
 template.isLargeTopElement(true)
         .addElement(element1)
         .addElement(element2)
