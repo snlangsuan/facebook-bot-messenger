@@ -7,3 +7,6 @@
 
 ## v1.0.4
  - Fixed bug
+
+## v1.0.5
+ - Fixed bug ListTemplateBuilder thx @mastasky
