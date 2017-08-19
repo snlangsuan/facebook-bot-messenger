@@ -209,11 +209,11 @@ var builder = new MessengerPlatform.AttachmentMessageBuilder(template);
 
 ```js
 var element1 = new MessengerPlatform.ListElementTemplateBuilder('Classic Black T-Shirt', 'https://peterssendreceiveapp.ngrok.io/img/black-t-shirt.png', '100% Cotton, 200% Comfortable');
-element1.setDefaultAction('https://peterssendreceiveapp.ngrok.io/view?item=102', 'https://peterssendreceiveapp.ngrok.io/', true, URLButton.HEIGHT_RATIO.TALL)
+element1.setDefaultAction('https://peterssendreceiveapp.ngrok.io/view?item=102', 'https://peterssendreceiveapp.ngrok.io/', true, MessengerPlatform.WebviewHeight.TALL)
         .addURLButton('Buy', 'https://peterssendreceiveapp.ngrok.io/view?item=102');
 
 var element2 = new MessengerPlatform.ListElementTemplateBuilder('Classic Gray T-Shirt', 'https://peterssendreceiveapp.ngrok.io/img/gray-t-shirt.png', '100% Cotton, 200% Comfortable');
-element2.setDefaultAction('https://peterssendreceiveapp.ngrok.io/view?item=103', 'https://peterssendreceiveapp.ngrok.io/', true, URLButton.HEIGHT_RATIO.TALL)
+element2.setDefaultAction('https://peterssendreceiveapp.ngrok.io/view?item=103', 'https://peterssendreceiveapp.ngrok.io/', true, MessengerPlatform.WebviewHeight.TALL)
         .addURLButton('Buy', 'https://peterssendreceiveapp.ngrok.io/shop?item=103');
 var template = new MessengerPlatform.ListTemplateBuilder();
 template.isLargeTopElement(true)

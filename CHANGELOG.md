@@ -10,3 +10,7 @@
 
 ## v1.0.5
  - Fixed bug ListTemplateBuilder thx @mastasky
+
+## v1.0.6
+ - Fixed bug send duplicated response
+ - Edited README.md
