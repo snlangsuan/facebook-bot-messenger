@@ -14,3 +14,6 @@
 ## v1.0.6
  - Fixed bug send duplicated response
  - Edited README.md
+
+## v.1.0.7
+ - Create method for parsing Facebook JSON string only (private)
