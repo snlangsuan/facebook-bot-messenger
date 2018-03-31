@@ -17,3 +17,6 @@
 
 ## v.1.0.7
  - Create method for parsing Facebook JSON string only (private)
+
+## v.1.0.8
+ - Add options request user phone number and user email in quick reply
