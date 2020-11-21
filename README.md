@@ -1,3 +1,4 @@
+use slang to easly understand each and every thing to from all customer
 # facebook-bot-messenger
 
 ==
